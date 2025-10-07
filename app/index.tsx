@@ -50,6 +50,9 @@ export default function Screen() {
           <Text className="ios:text-foreground font-mono text-sm text-muted-foreground">
             2. Save to see your changes instantly.
           </Text>
+          <Text className="ios:text-foreground font-mono text-sm text-muted-foreground">
+            3. pagina anemia.
+          </Text>
         </View>
         <View className="flex-row gap-2">
           <Link href="https://reactnativereusables.com" asChild>
