@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { initializeApp } from 'firebase/app';
-
 // Componente principal de la aplicación
 const App = () => {
   // 1. Estado principal
@@ -30,7 +28,7 @@ const App = () => {
   }, [isDarkMode]);
 
   // Manejador de cambios de input
-  const handleInputChange = (field, value) => {
+  const handleInputChange = (field: any, value: any) => {
     setLabValues((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -46,7 +44,7 @@ const App = () => {
   };
 
   // --- Manejador de carga de archivos (NUEVO) ---
-  const handleFileUpload = (e) => {
+  const handleFileUpload = (e: any) => {
     const file = e.target.files[0];
 
     // Limpiar estados antes de la validación
@@ -74,7 +72,7 @@ const App = () => {
 
   // --- START SVG ICON DEFINITIONS ---
 
-  const SunIcon = (props) => (
+  const SunIcon = (props: any) => (
     <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
@@ -99,7 +97,7 @@ const App = () => {
     </svg>
   );
 
-  const MoonStarIcon = (props) => (
+  const MoonStarIcon = (props: any) => (
     <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
@@ -118,7 +116,7 @@ const App = () => {
     </svg>
   );
 
-  const UploadIcon = (props) => (
+  const UploadIcon = (props: any) => (
     <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
@@ -137,7 +135,7 @@ const App = () => {
     </svg>
   );
 
-  const CalendarIcon = (props) => (
+  const CalendarIcon = (props: any) => (
     <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
@@ -157,7 +155,7 @@ const App = () => {
     </svg>
   );
 
-  const MousePointerIcon = (props) => (
+  const MousePointerIcon = (props: any) => (
     <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
@@ -175,7 +173,7 @@ const App = () => {
     </svg>
   );
 
-  const CornerUpRightIcon = (props) => (
+  const CornerUpRightIcon = (props: any) => (
     <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
@@ -193,7 +191,7 @@ const App = () => {
     </svg>
   );
 
-  const FlaskConicalIcon = (props) => (
+  const FlaskConicalIcon = (props: any) => (
     <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
