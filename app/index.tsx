@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-
+import {FormularioParaAnalisisDeResultados} from "../src/analisis"
+import {SeccionDeHistorialDeResultados} from "../src/historial"
+import {SeccionDeResultadosDeAnalisis} from "../src/resultados"
 // Componente principal de la aplicación
 const App = () => {
   const [activeTab, setActiveTab] = useState('analisis');
@@ -47,7 +49,7 @@ const App = () => {
   };
 
   // --- Manejador de carga de archivos ---
-  const handleFileUpload = (e: any) => {
+  const handleFileUpload = (e) => {
     const file = e.target.files[0];
     setErrorMessage('');
     setSelectedFile(null);
@@ -182,147 +184,16 @@ const App = () => {
   };
 
   // Campos de entrada
-  const LabInputField = ({ label, unit, value, onChange, fieldName }) => (
-    <div className="flex w-full flex-col">
-      <label className="mb-1 text-sm font-medium text-gray-700">
-        {label} (<span className="text-xs">{unit}</span>)
-      </label>
-      <input
-        type="number"
-        value={value}
-        onChange={(e) => onChange(fieldName, e.target.value)}
-        className="w-full rounded-md border border-gray-400 bg-white p-2 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500"
-      />
-    </div>
-  );
 
-  const AnalysisContent = () => (
-    <div className="space-y-4">
-      <div className="rounded-lg border border-gray-400 bg-white p-4 shadow-sm">
-        <p className="mb-4 text-base font-semibold text-gray-700">
-          Ingrese sus valores de laboratorio
-        </p>
-        <div className="grid grid-cols-2 gap-4">
-          <LabInputField
-            label="Hemoglobina"
-            unit="g/dL"
-            value={labValues.hemoglobina}
-            onChange={handleInputChange}
-            fieldName="hemoglobina"
-          />
-          <LabInputField
-            label="Hematocrito"
-            unit="%"
-            value={labValues.hematocrito}
-            onChange={handleInputChange}
-            fieldName="hematocrito"
-          />
-        </div>
-        <div className="mt-4 grid grid-cols-2 gap-4">
-          <LabInputField
-            label="Glóbulos Rojos"
-            unit="M/μL"
-            value={labValues.globulosRojos}
-            onChange={handleInputChange}
-            fieldName="globulosRojos"
-          />
-          <LabInputField
-            label="VCM"
-            unit="fL"
-            value={labValues.vcm}
-            onChange={handleInputChange}
-            fieldName="vcm"
-          />
-        </div>
-        <div className="mt-4 grid grid-cols-2 gap-4">
-          <LabInputField
-            label="HCM"
-            unit="pg"
-            value={labValues.hcm}
-            onChange={handleInputChange}
-            fieldName="hcm"
-          />
-          <LabInputField
-            label="CHCM"
-            unit="g/dL"
-            value={labValues.chcm}
-            onChange={handleInputChange}
-            fieldName="chcm"
-          />
-        </div>
-      </div>
-
-      <div className="flex justify-center pt-4">
-        <button
-          onClick={handleAnalyze}
-          className="rounded-md border border-gray-400 bg-gray-200 px-6 py-2 font-medium text-gray-800 shadow-sm hover:bg-gray-300">
-          Analizar sangre
-        </button>
-      </div>
-
-      <div className="pt-6">
-        <p className="mb-4 text-sm font-semibold text-gray-700">
-          Suba una foto o PDF (máx. 10 MB) para análisis:
-        </p>
-
-        <div className="shadow-inner flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-indigo-400 bg-white p-6">
-          <input
-            id="file-upload"
-            type="file"
-            accept=".pdf, image/jpeg, image/png"
-            onChange={handleFileUpload}
-            className="hidden"
-          />
-          <label
-            htmlFor="file-upload"
-            className="flex cursor-pointer items-center rounded-md border border-indigo-800 bg-indigo-600 px-4 py-2 font-medium text-white shadow-lg hover:bg-indigo-700">
-            <UploadIcon className="mr-2 h-5 w-5" />
-            {selectedFile ? 'Cambiar archivo' : 'Seleccionar archivo'}
-          </label>
-
-          {selectedFile && (
-            <p className="mt-3 text-center text-sm text-green-600">
-              Archivo seleccionado: <strong>{selectedFile.name}</strong> (
-              {Math.round(selectedFile.size / 1024)} KB)
-            </p>
-          )}
-
-          {errorMessage && (
-            <p className="mt-3 text-center text-sm text-red-600">Error: {errorMessage}</p>
-          )}
-
-          {!selectedFile && !errorMessage && (
-            <p className="mt-2 text-center text-xs text-gray-500">
-              Formatos aceptados: PDF, JPG, PNG.
-            </p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-
-  const ResultsContent = () => (
-    <div className="p-4 text-center text-gray-600">
-      <FlaskConicalIcon className="mx-auto mb-3 h-10 w-10 text-gray-400" />
-      <p>Aquí aparecerán los resultados de su análisis.</p>
-    </div>
-  );
-
-  const HistoryContent = () => (
-    <div className="p-4 text-center text-gray-600">
-      <CalendarIcon className="mx-auto mb-3 h-10 w-10 text-gray-400" />
-      <p>Su historial de análisis se guardará aquí.</p>
-    </div>
-  );
 
   const renderContent = () => {
     switch (activeTab) {
       case 'analisis':
-        return <AnalysisContent />;
+        return <FormularioParaAnalisisDeResultados />;
       case 'resultados':
-        return <ResultsContent />;
+        return <SeccionDeResultadosDeAnalisis />;
       case 'historial':
-        return <HistoryContent />;
+        return <SeccionDeHistorialDeResultados />;
       default:
         return null;
     }
