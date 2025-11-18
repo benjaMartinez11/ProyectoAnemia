@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import {FormularioParaAnalisisDeResultados} from "../src/analisis"
-import {SeccionDeHistorialDeResultados} from "../src/historial"
-import {SeccionDeResultadosDeAnalisis} from "../src/resultados"
+import { SeccionDeHistorialDeResultados } from '../src/historial';
+import { SeccionDeResultadosDeAnalisis } from '../src/resultados';
+
 // Componente principal de la aplicación
 const App = () => {
   const [activeTab, setActiveTab] = useState('analisis');
@@ -184,7 +184,6 @@ const App = () => {
   };
 
   // Campos de entrada
-
 
   const renderContent = () => {
     switch (activeTab) {

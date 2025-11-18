@@ -1,16 +1,56 @@
-import { ChangeEventHandler } from "react";
+import { View, Text, TextInput, StyleSheet } from 'react-native';
 
-export const LabInputField = ({ label, unit, value, onChange, fieldName }:{ label: string, unit: string, value: number, onChange: ChangeEventHandler<HTMLInputElement> , fieldName: string }) => (
-  <div className="flex w-full flex-col">
-    <label className="mb-1 text-sm font-medium text-gray-700">
-      {label} (<span className="text-xs">{unit}</span>)
-    </label>
-    <input
-      type="number"
-      aria-label={`${label}-${fieldName}`} // 🔹 accesibilidad única
-      value={value}
-      onChange={(e) => onChange(fieldName, e.target.value)}
-      className="w-full rounded-md border border-gray-400 bg-white p-2 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500"
-    />
-  </div>
-);
+export const LabInputField = ({
+  label,
+  unit,
+  value,
+  onChange,
+  fieldName,
+}: {
+  label: string;
+  unit: string;
+  value: string | number;
+  onChange: (fieldName: string, value: string) => void;
+  fieldName: string;
+}) => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.label}>
+        {label} <Text style={styles.unit}>({unit})</Text>
+      </Text>
+
+      <TextInput
+        keyboardType="numeric"
+        value={String(value)}
+        onChangeText={(text) => onChange(fieldName, text)}
+        style={styles.input}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    marginBottom: 12,
+    width: '48%',
+  },
+  label: {
+    marginBottom: 4,
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#333',
+  },
+  unit: {
+    fontSize: 12,
+    color: '#666',
+  },
+  input: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: '#aaa',
+    borderRadius: 6,
+    padding: 8,
+    backgroundColor: '#fff',
+    color: '#000',
+  },
+});

@@ -1,105 +1,170 @@
-import {LabInputField} from "./componentes"
-export const FormularioParaAnalisisDeResultados = () => (
-    <div className="space-y-4">
-      <div className="rounded-lg border border-gray-400 bg-white p-4 shadow-sm">
-        <p className="mb-4 text-base font-semibold text-gray-700">
-          Ingrese sus valores de laboratorio
-        </p>
-        <div className="grid grid-cols-2 gap-4">
-          <LabInputField
-            label="Hemoglobina"
-            unit="g/dL"
-            value={labValues.hemoglobina}
-            onChange={handleInputChange}
-            fieldName="hemoglobina"
-          />
-          <LabInputField
-            label="Hematocrito"
-            unit="%"
-            value={labValues.hematocrito}
-            onChange={handleInputChange}
-            fieldName="hematocrito"
-          />
-        </div>
-        <div className="mt-4 grid grid-cols-2 gap-4">
-          <LabInputField
-            label="Glóbulos Rojos"
-            unit="M/μL"
-            value={labValues.globulosRojos}
-            onChange={handleInputChange}
-            fieldName="globulosRojos"
-          />
-          <LabInputField
-            label="VCM"
-            unit="fL"
-            value={labValues.vcm}
-            onChange={handleInputChange}
-            fieldName="vcm"
-          />
-        </div>
-        <div className="mt-4 grid grid-cols-2 gap-4">
-          <LabInputField
-            label="HCM"
-            unit="pg"
-            value={labValues.hcm}
-            onChange={handleInputChange}
-            fieldName="hcm"
-          />
-          <LabInputField
-            label="CHCM"
-            unit="g/dL"
-            value={labValues.chcm}
-            onChange={handleInputChange}
-            fieldName="chcm"
-          />
-        </div>
-      </div>
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
+import * as DocumentPicker from 'expo-document-picker';
+import { Upload, FlaskConical } from 'lucide-react-native';
+import { LabInputField } from './componentes';
 
-      <div className="flex justify-center pt-4">
-        <button
-          onClick={handleAnalyze}
-          className="rounded-md border border-gray-400 bg-gray-200 px-6 py-2 font-medium text-gray-800 shadow-sm hover:bg-gray-300">
-          Analizar sangre
-        </button>
-      </div>
+export default function AnalisisScreen() {
+  const [selectedFile, setSelectedFile] = useState<any>(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
-      <div className="pt-6">
-        <p className="mb-4 text-sm font-semibold text-gray-700">
-          Suba una foto o PDF (máx. 10 MB) para análisis:
-        </p>
+  const [labValues, setLabValues] = useState({
+    hemoglobina: '',
+    hematocrito: '',
+    globulosRojos: '',
+    vcm: '',
+    hcm: '',
+    chcm: '',
+  });
 
-        <div className="shadow-inner flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-indigo-400 bg-white p-6">
-          <input
-            id="file-upload"
-            type="file"
-            accept=".pdf, image/jpeg, image/png"
-            onChange={handleFileUpload}
-            className="hidden"
-          />
-          <label
-            htmlFor="file-upload"
-            className="flex cursor-pointer items-center rounded-md border border-indigo-800 bg-indigo-600 px-4 py-2 font-medium text-white shadow-lg hover:bg-indigo-700">
-            <UploadIcon className="mr-2 h-5 w-5" />
-            {selectedFile ? 'Cambiar archivo' : 'Seleccionar archivo'}
-          </label>
+  const handleInputChange = (field: string, value: string) => {
+    setLabValues((prev) => ({ ...prev, [field]: value }));
+  };
 
-          {selectedFile && (
-            <p className="mt-3 text-center text-sm text-green-600">
-              Archivo seleccionado: <strong>{selectedFile.name}</strong> (
-              {Math.round(selectedFile.size / 1024)} KB)
-            </p>
-          )}
+  const handleAnalyze = () => {
+    const faltantes: string[] = [];
 
-          {errorMessage && (
-            <p className="mt-3 text-center text-sm text-red-600">Error: {errorMessage}</p>
-          )}
+    Object.entries(labValues).forEach(([key, val]) => {
+      if (!val) faltantes.push(key);
+    });
 
-          {!selectedFile && !errorMessage && (
-            <p className="mt-2 text-center text-xs text-gray-500">
-              Formatos aceptados: PDF, JPG, PNG.
-            </p>
-          )}
-        </div>
-      </div>
-    </div>
+    if (faltantes.length) {
+      setErrorMessage('Faltan completar: ' + faltantes.join(', '));
+      return;
+    }
+
+    setErrorMessage('');
+    console.log('Analizando...', labValues);
+  };
+
+  // 📌 Selección de archivo con Expo DocumentPicker
+  const handleFileUpload = async () => {
+    setErrorMessage('');
+
+    const result = await DocumentPicker.getDocumentAsync({
+      type: ['application/pdf', 'image/*'],
+      multiple: false,
+    });
+
+    if (result.canceled) return;
+
+    const file = result.assets[0];
+
+    if (file.size > 10 * 1024 * 1024) {
+      setErrorMessage('El archivo supera los 10 MB.');
+      return;
+    }
+
+    setSelectedFile(file);
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Ingrese sus valores de laboratorio</Text>
+
+      {/* 📌 Inputs */}
+      <View style={styles.row}>
+        <LabInputField
+          label="Hemoglobina"
+          unit="g/dL"
+          value={labValues.hemoglobina}
+          onChange={handleInputChange}
+          fieldName="hemoglobina"
+        />
+        <LabInputField
+          label="Hematocrito"
+          unit="%"
+          value={labValues.hematocrito}
+          onChange={handleInputChange}
+          fieldName="hematocrito"
+        />
+      </View>
+
+      <View style={styles.row}>
+        <LabInputField
+          label="Glóbulos Rojos"
+          unit="M/μL"
+          value={labValues.globulosRojos}
+          onChange={handleInputChange}
+          fieldName="globulosRojos"
+        />
+        <LabInputField
+          label="VCM"
+          unit="fL"
+          value={labValues.vcm}
+          onChange={handleInputChange}
+          fieldName="vcm"
+        />
+      </View>
+
+      <View style={styles.row}>
+        <LabInputField
+          label="HCM"
+          unit="pg"
+          value={labValues.hcm}
+          onChange={handleInputChange}
+          fieldName="hcm"
+        />
+        <LabInputField
+          label="CHCM"
+          unit="g/dL"
+          value={labValues.chcm}
+          onChange={handleInputChange}
+          fieldName="chcm"
+        />
+      </View>
+
+      {/* 📌 Botón analizar */}
+      <TouchableOpacity style={styles.button} onPress={handleAnalyze}>
+        <Text style={styles.buttonText}>Analizar sangre</Text>
+      </TouchableOpacity>
+
+      {/* 📌 Subida de archivo */}
+      <Text style={styles.subtitle}>Suba un PDF o imagen (máx. 10 MB)</Text>
+
+      <TouchableOpacity style={styles.uploadBox} onPress={handleFileUpload}>
+        <Upload size={28} color="#4b4bff" />
+        <Text style={styles.uploadText}>
+          {selectedFile ? 'Cambiar archivo' : 'Seleccionar archivo'}
+        </Text>
+      </TouchableOpacity>
+
+      {selectedFile && (
+        <Text style={styles.successText}>Archivo seleccionado: {selectedFile.name}</Text>
+      )}
+
+      {errorMessage?.length > 0 && <Text style={styles.errorText}>{errorMessage}</Text>}
+    </View>
   );
+}
+
+const styles = StyleSheet.create({
+  container: { padding: 16 },
+  title: { fontSize: 20, fontWeight: '700', marginBottom: 10 },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: '#ccc',
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  buttonText: { fontWeight: '600', fontSize: 16 },
+  subtitle: { marginTop: 20, fontWeight: '600', color: '#333' },
+  uploadBox: {
+    marginTop: 10,
+    padding: 16,
+    borderWidth: 2,
+    borderColor: '#4b4bff',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  uploadText: { marginTop: 8, fontSize: 14, color: '#4b4bff' },
+  successText: { marginTop: 10, color: 'green', fontSize: 14 },
+  errorText: { marginTop: 10, color: 'red', fontSize: 14 },
+});
