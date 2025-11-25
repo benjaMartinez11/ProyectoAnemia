@@ -4,6 +4,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import { Upload, FlaskConical } from 'lucide-react-native';
 import { LabInputField } from './componentes';
 
+
 export default function AnalisisScreen() {
   const [selectedFile, setSelectedFile] = useState<any>(null);
   const [errorMessage, setErrorMessage] = useState('');
@@ -50,7 +51,7 @@ export default function AnalisisScreen() {
 
     const file = result.assets[0];
 
-    if (file.size > 10 * 1024 * 1024) {
+    if (file.size! > 10 * 1024 * 1024) {
       setErrorMessage('El archivo supera los 10 MB.');
       return;
     }

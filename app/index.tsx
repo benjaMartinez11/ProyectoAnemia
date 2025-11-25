@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { SeccionDeHistorialDeResultados } from '../src/historial';
 import { SeccionDeResultadosDeAnalisis } from '../src/resultados';
+import FormularioParaAnalisisDeResultados from '../src/analisis';
+import { MousePointer, CornerUpRight, Calendar, FlaskConical } from "lucide-react-native";
+import { Text, View } from 'react-native';
+import { Button } from '../components/ui/button';
 
+
+ 
 // Componente principal de la aplicación
 const App = () => {
   const [activeTab, setActiveTab] = useState('analisis');
@@ -48,29 +54,6 @@ const App = () => {
     setActiveTab('resultados');
   };
 
-  // --- Manejador de carga de archivos ---
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    setErrorMessage('');
-    setSelectedFile(null);
-
-    if (!file) return;
-
-    const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
-    const maxSize = 10 * 1024 * 1024; // 10 MB
-
-    if (!allowedTypes.includes(file.type)) {
-      setErrorMessage('Solo se permiten archivos PDF, JPG o PNG.');
-      return;
-    }
-
-    if (file.size > maxSize) {
-      setErrorMessage('El archivo supera los 10 MB.');
-      return;
-    }
-
-    setSelectedFile(file);
-  };
 
   // --- Íconos usados ---
   const UploadIcon = (props: any) => (
@@ -92,77 +75,24 @@ const App = () => {
   );
 
   const CalendarIcon = (props: any) => (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="lucide lucide-calendar">
-      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-      <line x1="16" y1="2" x2="16" y2="6" />
-      <line x1="8" y1="2" x2="8" y2="6" />
-      <line x1="3" y1="10" x2="21" y2="10" />
-    </svg>
+      <Calendar size={20} color="#555" />
   );
 
-  const MousePointerIcon = (props: any) => (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="lucide lucide-mouse-pointer">
-      <path d="m3 3 7.07 16.27 3.65-4.59 4.59-3.65L3 3z" />
-      <path d="M11 11l4 4" />
-    </svg>
+  const MousePointerIcon = () => (
+    <MousePointer size={20} color="#555" />
   );
 
   const CornerUpRightIcon = (props: any) => (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="lucide lucide-corner-up-right">
-      <polyline points="15 14 20 9 15 4" />
-      <path d="M4 20v-7a4 4 0 0 1 4-4h12" />
-    </svg>
+          <CornerUpRight size={20} color="#555" />
   );
 
   const FlaskConicalIcon = (props: any) => (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="lucide lucide-flask-conical">
-      <path d="M14.425 2.125a1 1 0 0 0-.85-1.028l-3.2-.8A2 2 0 0 0 8 2.05v.2a2 2 0 0 0 1.25 1.83l.8.44a1 1 0 0 0 .95 0l.8-.44A2 2 0 0 0 14 2.25v-.13Z" />
-      <path d="M9 3v2.85A2.15 2.15 0 0 0 9 8v12.27c0 1.34 1.13 2.43 2.5 2.43s2.5-1.1 2.5-2.43V8a2.15 2.15 0 0 0 0-2.15V3" />
-    </svg>
+          <FlaskConical size={20} color="#555" />
+
   );
 
   // Botón de pestaña
-  const TabButton = ({ label, tabId, isSelected }) => {
+  const TabButton = ({ label, tabId, isSelected }:{label: string, tabId: string, isSelected: boolean  }) => {
     const baseClasses =
       'flex flex-row items-center justify-center p-2 rounded-lg transition-all duration-150 border';
     const selectedClasses = 'bg-gray-700 text-white border-gray-700 shadow-md';
@@ -174,12 +104,11 @@ const App = () => {
     if (tabId === 'historial') DisplayIcon = CalendarIcon;
 
     return (
-      <button
-        onClick={() => setActiveTab(tabId)}
-        className={`${baseClasses} ${isSelected ? selectedClasses : unselectedClasses} w-1/3`}>
+      <Button
+        onPress={() => setActiveTab(tabId)}>
         {DisplayIcon && <DisplayIcon className="mr-1 h-4 w-4" />}
-        <span className="text-sm font-medium">{label}</span>
-      </button>
+        <Text className="text-sm font-medium">{label}</Text>
+      </Button>
     );
   };
 
@@ -199,13 +128,13 @@ const App = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
-      <div className="max-h-screen w-full max-w-md overflow-y-auto rounded-lg border border-gray-400 bg-white shadow-xl">
-        <div className="flex items-center justify-center border-b border-gray-400 bg-white p-4">
-          <h1 className="text-2xl font-semibold text-gray-900">Anemiache</h1>
-        </div>
+    <View className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
+      <View className="max-h-screen w-full max-w-md overflow-y-auto rounded-lg border border-gray-400 bg-white shadow-xl">
+        <View className="flex items-center justify-center border-b border-gray-400 bg-white p-4">
+          <Text className="text-2xl font-semibold text-gray-900">Anemiache</Text>
+        </View>
 
-        <div className="flex justify-between gap-2 border-b border-gray-400 bg-white p-4">
+        <View className="flex justify-between gap-2 border-b border-gray-400 bg-white p-4">
           <TabButton label="Análisis" tabId="analisis" isSelected={activeTab === 'analisis'} />
           <TabButton
             label="Resultados"
@@ -213,11 +142,10 @@ const App = () => {
             isSelected={activeTab === 'resultados'}
           />
           <TabButton label="Historial" tabId="historial" isSelected={activeTab === 'historial'} />
-        </div>
+        </View>
 
-        <div className="border border-gray-400 bg-blue-100 p-6">{renderContent()}</div>
-      </div>
-    </div>
+      </View>
+    </View>
   );
 };
 
