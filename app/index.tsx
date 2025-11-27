@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import { SeccionDeHistorialDeResultados } from '../src/historial';
 import { SeccionDeResultadosDeAnalisis } from '../src/resultados';
 import FormularioParaAnalisisDeResultados from '../src/analisis';
-import { MousePointer, CornerUpRight, Calendar, FlaskConical } from "lucide-react-native";
+import { MousePointer, CornerUpRight, Calendar, FlaskConical } from 'lucide-react-native';
 import { Text, View } from 'react-native';
 import { Button } from '../components/ui/button';
 
-
- 
 // Componente principal de la aplicación
 const App = () => {
   const [activeTab, setActiveTab] = useState('analisis');
@@ -54,7 +52,6 @@ const App = () => {
     setActiveTab('resultados');
   };
 
-
   // --- Íconos usados ---
   const UploadIcon = (props: any) => (
     <svg
@@ -74,25 +71,24 @@ const App = () => {
     </svg>
   );
 
-  const CalendarIcon = (props: any) => (
-      <Calendar size={20} color="#555" />
-  );
+  const CalendarIcon = (props: any) => <Calendar size={20} color="#555" />;
 
-  const MousePointerIcon = () => (
-    <MousePointer size={20} color="#555" />
-  );
+  const MousePointerIcon = () => <MousePointer size={20} color="#555" />;
 
-  const CornerUpRightIcon = (props: any) => (
-          <CornerUpRight size={20} color="#555" />
-  );
+  const CornerUpRightIcon = (props: any) => <CornerUpRight size={20} color="#555" />;
 
-  const FlaskConicalIcon = (props: any) => (
-          <FlaskConical size={20} color="#555" />
-
-  );
+  const FlaskConicalIcon = (props: any) => <FlaskConical size={20} color="#555" />;
 
   // Botón de pestaña
-  const TabButton = ({ label, tabId, isSelected }:{label: string, tabId: string, isSelected: boolean  }) => {
+  const TabButton = ({
+    label,
+    tabId,
+    isSelected,
+  }: {
+    label: string;
+    tabId: string;
+    isSelected: boolean;
+  }) => {
     const baseClasses =
       'flex flex-row items-center justify-center p-2 rounded-lg transition-all duration-150 border';
     const selectedClasses = 'bg-gray-700 text-white border-gray-700 shadow-md';
@@ -104,8 +100,7 @@ const App = () => {
     if (tabId === 'historial') DisplayIcon = CalendarIcon;
 
     return (
-      <Button
-        onPress={() => setActiveTab(tabId)}>
+      <Button onPress={() => setActiveTab(tabId)}>
         {DisplayIcon && <DisplayIcon className="mr-1 h-4 w-4" />}
         <Text className="text-sm font-medium">{label}</Text>
       </Button>
@@ -130,10 +125,12 @@ const App = () => {
   return (
     <View className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
       <View className="max-h-screen w-full max-w-md overflow-y-auto rounded-lg border border-gray-400 bg-white shadow-xl">
+        {/* Título */}
         <View className="flex items-center justify-center border-b border-gray-400 bg-white p-4">
           <Text className="text-2xl font-semibold text-gray-900">Anemiache</Text>
         </View>
 
+        {/* Tabs */}
         <View className="flex justify-between gap-2 border-b border-gray-400 bg-white p-4">
           <TabButton label="Análisis" tabId="analisis" isSelected={activeTab === 'analisis'} />
           <TabButton
@@ -144,6 +141,8 @@ const App = () => {
           <TabButton label="Historial" tabId="historial" isSelected={activeTab === 'historial'} />
         </View>
 
+        {/* 👉 AQUI DEBE IR EL CONTENIDO */}
+        <View style={{ padding: 16 }}>{renderContent()}</View>
       </View>
     </View>
   );
