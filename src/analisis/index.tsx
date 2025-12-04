@@ -71,52 +71,58 @@ export default function AnalisisScreen() {
           value={labValues.hemoglobina}
           onChange={handleInputChange}
           fieldName="hemoglobina"
-        />
+          testID="hemoglobina"
+          />
         <LabInputField
-          label="Hematocrito"
+          label="IDCampoDeTextoParaHematocritos"
           unit="%"
           value={labValues.hematocrito}
           onChange={handleInputChange}
-          fieldName="hematocrito"
+          fieldName="IDCampoDeTextoParaHematocritos"
+          testID="IDCampoDeTextoParaHematocritos"
         />
       </View>
 
       <View style={styles.row}>
         <LabInputField
-          label="Glóbulos Rojos"
+          label="IDCampoDeTextoParaGlobulosRojos"
           unit="M/μL"
           value={labValues.globulosRojos}
           onChange={handleInputChange}
-          fieldName="globulosRojos"
+          fieldName="IDCampoDeTextoParaGlobulosRojos"
+          testID='IDCampoDeTextoParaGlobulosRojos'
         />
         <LabInputField
-          label="VCM"
+          label="IDCampoDeTextoParaVcm"
           unit="fL"
           value={labValues.vcm}
           onChange={handleInputChange}
-          fieldName="vcm"
+          fieldName="IDCampoDeTextoParaVcm"
+          testID='IDCampoDeTextoParaVcm'
         />
       </View>
 
       <View style={styles.row}>
         <LabInputField
-          label="HCM"
+          label="IDCampoDeTextoParaHcm"
           unit="pg"
           value={labValues.hcm}
           onChange={handleInputChange}
-          fieldName="hcm"
+          fieldName="IDCampoDeTextoParaHcm"
+          testID='IDCampoDeTextoParaHcm'
         />
         <LabInputField
-          label="CHCM"
+          label="IDCampoDeTextoParaChcm"
           unit="g/dL"
           value={labValues.chcm}
           onChange={handleInputChange}
-          fieldName="chcm"
+          fieldName="IDCampoDeTextoParaChcm"
+          testID='IDCampoDeTextoParaChcm'
         />
       </View>
 
       {/* 📌 Botón analizar */}
-      <TouchableOpacity style={styles.button} onPress={handleAnalyze}>
+      <TouchableOpacity style={styles.button} onPress={handleAnalyze} testID="BotonParaAnalizarFormulario">
         <Text style={styles.buttonText}>Analizar sangre</Text>
       </TouchableOpacity>
 

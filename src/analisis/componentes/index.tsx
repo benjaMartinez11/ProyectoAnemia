@@ -6,12 +6,14 @@ export const LabInputField = ({
   value,
   onChange,
   fieldName,
+  testID,
 }: {
   label: string;
   unit: string;
   value: string | number;
   onChange: (fieldName: string, value: string) => void;
   fieldName: string;
+  testID: string;
 }) => {
   return (
     <View style={styles.container}>
@@ -24,6 +26,7 @@ export const LabInputField = ({
         value={String(value)}
         onChangeText={(text) => onChange(fieldName, text)}
         style={styles.input}
+        testID={testID}
       />
     </View>
   );

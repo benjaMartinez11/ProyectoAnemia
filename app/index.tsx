@@ -127,7 +127,7 @@ const App = () => {
       <View className="max-h-screen w-full max-w-md overflow-y-auto rounded-lg border border-gray-400 bg-white shadow-xl">
         {/* Título */}
         <View className="flex items-center justify-center border-b border-gray-400 bg-white p-4">
-          <Text className="text-2xl font-semibold text-gray-900">Anemiache</Text>
+          <Text className="text-6xl font-semibold text-white">Anemiache</Text>
         </View>
 
         {/* Tabs */}
