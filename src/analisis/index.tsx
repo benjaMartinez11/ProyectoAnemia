@@ -66,12 +66,12 @@ export default function AnalisisScreen() {
       {/* 📌 Inputs */}
       <View style={styles.row}>
         <LabInputField
-          label="Hemoglobina"
+          label="IDCampoDeTextoParaHemoglobina"
           unit="g/dL"
           value={labValues.hemoglobina}
           onChange={handleInputChange}
-          fieldName="hemoglobina"
-          testID="hemoglobina"
+          fieldName="IDCampoDeTextoParaHemoglobina"
+          testID="IDCampoDeTextoParaHemoglobina"
           />
         <LabInputField
           label="IDCampoDeTextoParaHematocritos"

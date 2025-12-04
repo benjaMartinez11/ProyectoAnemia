@@ -3,13 +3,16 @@ import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import Analisis from '../src/analisis'; // ajustá la ruta si tu componente está en otro lugar
 
 describe('Formulario de análisis de laboratorio', () => {
-  test('Dado que todo el formulario para analisis esta completo a exceptcion de hemoglobina, al hacer click en analizar sangre, se deberia emitir el mensaje "falta completar: hemoglobina"', async () => {
+  test('Dado que todo el formulario para analisis esta completo a exceptcion de Hematocritos, al hacer click en analizar sangre, se deberia emitir el mensaje "falta completar: Hematocritos"', async () => {
     const { getByTestId, queryByText } = render(<Analisis />);
 
     // Obtener capoDeTexto por su testID único (asegurate de asignarlos en los inputs)
-    //const hemoglobinaInput = getByTestId('hemoglobina');
-    const campoDeTextoParaHematocritos = getByTestId('IDCampoDeTextoParaHematocritos');
-    fireEvent.changeText(campoDeTextoParaHematocritos, '42');
+    const campoDeTextoParaHemaglobina = getByTestId('IDCampoDeTextoParaHemoglobina');
+    fireEvent.changeText(campoDeTextoParaHemaglobina, '12');
+
+
+    //const campoDeTextoParaHematocritos = getByTestId('IDCampoDeTextoParaHematocritos');
+    //fireEvent.changeText(campoDeTextoParaHematocritos, '42');
 
 
     const campoDeTextoParaGlobulosRojos = getByTestId('IDCampoDeTextoParaGlobulosRojos');
@@ -36,7 +39,18 @@ describe('Formulario de análisis de laboratorio', () => {
 
     // Verificar que no hay errores visibles
     await waitFor(() => {
-      expect(queryByText(/falta completar: hemoglobina/i)).toBeNull();
+      expect(queryByText(/falta completar: Hematocritos/i)).toBeNull();
     })
+  });
+
+  test('muestra mensaje de error si faltan campos', () => {
+    const { getByTestId, queryByText } = render(<Analisis />);
+
+    // Simular clic en "Analizar sangre" sin completar nada
+    const analizarBtn = getByTestId('analizarBtn');
+    fireEvent.press(analizarBtn);
+
+    // Esperamos que aparezca mensaje de error
+    expect(queryByText(/falta completar: Hematocritos/i)).toBeTruthy();
   });
 });
