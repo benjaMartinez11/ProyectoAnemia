@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "32f3a7325583c6d7bc3d4a81bbe168b8f4e158e2f313d4e85675c20d3d1a42bb"
+            "sha256": "aa05cdc9b434b8e45a2bacedad724eab69476ee75c1df6593f0105831ecd733d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -42,11 +42,11 @@
         },
         "certifi": {
             "hashes": [
-                "sha256:9943707519e4add1115f44c2bc244f782c0249876bf51b6599fee1ffbedd685c",
-                "sha256:ac726dd470482006e014ad384921ed6438c457018f4b3d204aea4281258b2120"
+                "sha256:027692e4402ad994f1c42e52a4997a9763c646b73e4096e4d5d6db8af1d6f0fa",
+                "sha256:e887ab5cee78ea814d3472169153c2d12cd43b14bd03329a39a9c6e2e80bfba7"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==2026.1.4"
+            "version": "==2026.2.25"
         },
         "click": {
             "hashes": [
@@ -94,10 +94,10 @@
         },
         "fastapi-cloud-cli": {
             "hashes": [
-                "sha256:4d8f42337e8021c648f6cb0672de7d5b31b0fc7387a83d7b12f974600ac3f2fd",
-                "sha256:874a9ed8dba34ec828f198c72de9f9a38de77ac1b15083d6bc3a4d772b0bc477"
+                "sha256:325fcb4b45e661184152da6db861d9fb718739fbcd561a4d334dbe78c026586f",
+                "sha256:d3ecb8c942685a71df0af7bd59f463b5eff76f5818b48e5a03c6159726831e68"
             ],
-            "version": "==0.13.0"
+            "version": "==0.14.0"
         },
         "fastar": {
             "hashes": [
@@ -949,6 +949,8 @@
                 "sha256:09d11cf7008da33113824ee5a1c6422d89fbc2ff476540d69a34c87fab8b571a",
                 "sha256:29e35b1d2c36a04b9e180d4007ede3bcb32a85fbdfd6c6aeb3f26839de088187"
             ],
+            "index": "pypi",
+            "markers": "python_version >= '3.10'",
             "version": "==0.41.0"
         },
         "uvloop": {
