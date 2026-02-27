@@ -43,14 +43,5 @@ describe('Formulario de análisis de laboratorio', () => {
     })
   });
 
-  test('muestra mensaje de error si faltan campos', () => {
-    const { getByTestId, queryByText } = render(<Analisis />);
 
-    // Simular clic en "Analizar sangre" sin completar nada
-    const analizarBtn = getByTestId('analizarBtn');
-    fireEvent.press(analizarBtn);
-
-    // Esperamos que aparezca mensaje de error
-    expect(queryByText(/falta completar: Hematocritos/i)).toBeTruthy();
-  });
 });

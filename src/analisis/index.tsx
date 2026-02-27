@@ -22,22 +22,46 @@ export default function AnalisisScreen() {
     setLabValues((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleAnalyze = () => {
-    const faltantes: string[] = [];
+  const handleAnalyze = async () => {
+  const faltantes: string[] = [];
 
-    Object.entries(labValues).forEach(([key, val]) => {
-      if (!val) faltantes.push(key);
-    });
+  Object.entries(labValues).forEach(([key, val]) => {
+    if (!val) faltantes.push(key);
+  });
 
-    if (faltantes.length) {
-      setErrorMessage('Faltan completar: ' + faltantes.join(', '));
-      return;
-    }
+  if (faltantes.length) {
+    setErrorMessage('Faltan completar: ' + faltantes.join(', '));
+    return;
+  }
 
-    setErrorMessage('');
-    console.log('Analizando...', labValues);
+  setErrorMessage('');
+
+  // ✅ Convertimos los valores a número
+  const payload = {
+    hemoglobina: parseFloat(labValues.hemoglobina),
+    hematocrito: parseFloat(labValues.hematocrito),
+    globulosRojos: parseFloat(labValues.globulosRojos),
+    vcm: parseFloat(labValues.vcm),
+    hcm: parseFloat(labValues.hcm),
+    chcm: parseFloat(labValues.chcm),
   };
 
+  try {
+    const response = await fetch('http://10.0.2.2:8000/analisis', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json();
+    console.log('Respuesta backend:', data);
+
+  } catch (error) {
+    console.log('Error al conectar con el backend:', error);
+  }
+};
   // 📌 Selección de archivo con Expo DocumentPicker
   const handleFileUpload = async () => {
     setErrorMessage('');
@@ -64,62 +88,65 @@ export default function AnalisisScreen() {
       <Text style={styles.title}>Ingrese sus valores de laboratorio</Text>
 
       {/* 📌 Inputs */}
-      <View style={styles.row}>
-        <LabInputField
-          label="IDCampoDeTextoParaHemoglobina"
-          unit="g/dL"
-          value={labValues.hemoglobina}
-          onChange={handleInputChange}
-          fieldName="IDCampoDeTextoParaHemoglobina"
-          testID="IDCampoDeTextoParaHemoglobina"
-          />
-        <LabInputField
-          label="IDCampoDeTextoParaHematocritos"
-          unit="%"
-          value={labValues.hematocrito}
-          onChange={handleInputChange}
-          fieldName="IDCampoDeTextoParaHematocritos"
-          testID="IDCampoDeTextoParaHematocritos"
-        />
-      </View>
+<View style={styles.row}>
+  <LabInputField
+    label="Hemoglobina"
+    unit="g/dL"
+    value={labValues.hemoglobina}
+    onChange={handleInputChange}
+    fieldName="hemoglobina"
+    testID="IDCampoDeTextoParaHemoglobina"
+  /> 
 
-      <View style={styles.row}>
-        <LabInputField
-          label="IDCampoDeTextoParaGlobulosRojos"
-          unit="M/μL"
-          value={labValues.globulosRojos}
-          onChange={handleInputChange}
-          fieldName="IDCampoDeTextoParaGlobulosRojos"
-          testID='IDCampoDeTextoParaGlobulosRojos'
-        />
-        <LabInputField
-          label="IDCampoDeTextoParaVcm"
-          unit="fL"
-          value={labValues.vcm}
-          onChange={handleInputChange}
-          fieldName="IDCampoDeTextoParaVcm"
-          testID='IDCampoDeTextoParaVcm'
-        />
-      </View>
+  <LabInputField
+    label="Hematocrito"
+    unit="%"
+    value={labValues.hematocrito}
+    onChange={handleInputChange}
+    fieldName="hematocrito"
+    testID="IDCampoDeTextoParaHematocritos"
+  />
+</View>
 
-      <View style={styles.row}>
-        <LabInputField
-          label="IDCampoDeTextoParaHcm"
-          unit="pg"
-          value={labValues.hcm}
-          onChange={handleInputChange}
-          fieldName="IDCampoDeTextoParaHcm"
-          testID='IDCampoDeTextoParaHcm'
-        />
-        <LabInputField
-          label="IDCampoDeTextoParaChcm"
-          unit="g/dL"
-          value={labValues.chcm}
-          onChange={handleInputChange}
-          fieldName="IDCampoDeTextoParaChcm"
-          testID='IDCampoDeTextoParaChcm'
-        />
-      </View>
+<View style={styles.row}>
+  <LabInputField
+    label="Glóbulos Rojos"
+    unit="M/μL"
+    value={labValues.globulosRojos}
+    onChange={handleInputChange}
+    fieldName="globulosRojos"
+    testID="IDCampoDeTextoParaGlobulosRojos"
+  />
+
+  <LabInputField
+    label="VCM"
+    unit="fL"
+    value={labValues.vcm}
+    onChange={handleInputChange}
+    fieldName="vcm"
+    testID="IDCampoDeTextoParaVcm"
+  />
+</View>
+
+<View style={styles.row}>
+  <LabInputField
+    label="HCM"
+    unit="pg"
+    value={labValues.hcm}
+    onChange={handleInputChange}
+    fieldName="hcm"
+    testID="IDCampoDeTextoParaHcm"
+  />
+
+  <LabInputField
+    label="CHCM"
+    unit="g/dL"
+    value={labValues.chcm}
+    onChange={handleInputChange}
+    fieldName="chcm"
+    testID="IDCampoDeTextoParaChcm"
+  />
+</View>
 
       {/* 📌 Botón analizar */}
       <TouchableOpacity style={styles.button} onPress={handleAnalyze} testID="BotonParaAnalizarFormulario">
