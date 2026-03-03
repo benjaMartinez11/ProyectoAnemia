@@ -2,17 +2,14 @@ import React, { useState } from 'react';
 import { SeccionDeHistorialDeResultados } from '../src/historial';
 import { SeccionDeResultadosDeAnalisis } from '../src/resultados';
 import FormularioParaAnalisisDeResultados from '../src/analisis';
-import { MousePointer, CornerUpRight, Calendar, FlaskConical } from 'lucide-react-native';
+import { MousePointer, CornerUpRight, Calendar } from 'lucide-react-native';
 import { Text, View } from 'react-native';
 import { Button } from '../components/ui/button';
 
-// Componente principal de la aplicación
 const App = () => {
   const [activeTab, setActiveTab] = useState('analisis');
-  const [selectedFile, setSelectedFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // 2. Valores de Laboratorio
   const [labValues, setLabValues] = useState({
     hemoglobina: '',
     hematocrito: '',
@@ -22,127 +19,129 @@ const App = () => {
     chcm: '',
   });
 
-  // Manejador de cambios de input
-  const handleInputChange = (field: any, value: any) => {
+  const [historial, setHistorial] = useState<any[]>([]);
+
+  const handleInputChange = (field: string, value: string) => {
     setLabValues((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Función de análisis simplificada (sin llamadas a la API)
-  const handleAnalyze = () => {
+  const handleAnalyze = (valores: any) => {
     const camposFaltantes: string[] = [];
 
-    // Verificar campos vacíos
-    if (!labValues.hemoglobina) camposFaltantes.push('Hemoglobina');
-    if (!labValues.hematocrito) camposFaltantes.push('Hematocrito');
-    if (!labValues.globulosRojos) camposFaltantes.push('Glóbulos Rojos');
-    if (!labValues.vcm) camposFaltantes.push('VCM');
-    if (!labValues.hcm) camposFaltantes.push('HCM');
-    if (!labValues.chcm) camposFaltantes.push('CHCM');
+    Object.entries(valores).forEach(([key, val]) => {
+      if (!val) camposFaltantes.push(key);
+    });
 
-    // Si hay campos vacíos, mostrar mensaje
     if (camposFaltantes.length > 0) {
-      const mensaje = `Te falta completar los datos de: ${camposFaltantes.join(', ')}`;
-      setErrorMessage(mensaje);
+      setErrorMessage(`Te falta completar: ${camposFaltantes.join(', ')}`);
       return;
     }
 
-    // Si todo está completo, continuar
     setErrorMessage('');
-    console.log('Valores a analizar:', labValues);
-    setActiveTab('resultados');
+
+    // Convertimos a número
+    const datosNumericos = {
+      hemoglobina: parseFloat(valores.hemoglobina),
+      hematocrito: parseFloat(valores.hematocrito),
+      globulosRojos: parseFloat(valores.globulosRojos),
+      vcm: parseFloat(valores.vcm),
+      hcm: parseFloat(valores.hcm),
+      chcm: parseFloat(valores.chcm),
+    };
+
+    // Rangos normales
+    const rangos: any = {
+      hemoglobina: [12.0, 17.5],
+      hematocrito: [36.0, 52.0],
+      globulosRojos: [4.0, 6.0],
+      vcm: [80.0, 100.0],
+      hcm: [27.0, 33.0],
+      chcm: [30.0, 36.0],
+    };
+
+    let fueraDeRango = false;
+
+    Object.entries(datosNumericos).forEach(([key, value]) => {
+      const [min, max] = rangos[key];
+      if (value < min || value > max) {
+        fueraDeRango = true;
+      }
+    });
+
+    let diagnostico = '';
+    let recomendaciones = '';
+
+    if (!fueraDeRango) {
+      diagnostico = 'Todos los parámetros están dentro de rango.';
+      recomendaciones = 'Mantener alimentación equilibrada y controles anuales.';
+    } else {
+      diagnostico = 'Se detectaron valores fuera de rango.';
+      recomendaciones = 'Se recomienda evaluación médica para diagnóstico preciso.';
+    }
+
+    const nuevoRegistro = {
+      id: Date.now().toString(),
+      fecha: new Date().toLocaleString(),
+      ...valores,
+      diagnostico,
+      recomendaciones,
+    };
+
+    setHistorial((prev) => [nuevoRegistro, ...prev]);
+    setActiveTab('historial');
   };
 
-  // --- Íconos usados ---
-  const UploadIcon = (props: any) => (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="lucide lucide-upload">
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-      <polyline points="17 8 12 3 7 8" />
-      <line x1="12" x2="12" y1="3" y2="15" />
-    </svg>
-  );
-
-  const CalendarIcon = (props: any) => <Calendar size={20} color="#555" />;
-
-  const MousePointerIcon = () => <MousePointer size={20} color="#555" />;
-
-  const CornerUpRightIcon = (props: any) => <CornerUpRight size={20} color="#555" />;
-
-  const FlaskConicalIcon = (props: any) => <FlaskConical size={20} color="#555" />;
-
-  // Botón de pestaña
-  const TabButton = ({
-    label,
-    tabId,
-    isSelected,
-  }: {
-    label: string;
-    tabId: string;
-    isSelected: boolean;
-  }) => {
-    const baseClasses =
-      'flex flex-row items-center justify-center p-2 rounded-lg transition-all duration-150 border';
-    const selectedClasses = 'bg-gray-700 text-white border-gray-700 shadow-md';
-    const unselectedClasses = 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200';
-
-    let DisplayIcon;
-    if (tabId === 'analisis') DisplayIcon = MousePointerIcon;
-    if (tabId === 'resultados') DisplayIcon = CornerUpRightIcon;
-    if (tabId === 'historial') DisplayIcon = CalendarIcon;
+  const TabButton = ({ label, tabId }: { label: string; tabId: string }) => {
+    let Icon;
+    if (tabId === 'analisis') Icon = MousePointer;
+    if (tabId === 'resultados') Icon = CornerUpRight;
+    if (tabId === 'historial') Icon = Calendar;
 
     return (
       <Button onPress={() => setActiveTab(tabId)}>
-        {DisplayIcon && <DisplayIcon className="mr-1 h-4 w-4" />}
-        <Text className="text-sm font-medium">{label}</Text>
+        {Icon && <Icon size={18} />}
+        <Text style={{ marginLeft: 5 }}>{label}</Text>
       </Button>
     );
   };
 
-  // Campos de entrada
-
   const renderContent = () => {
     switch (activeTab) {
       case 'analisis':
-        return <FormularioParaAnalisisDeResultados />;
+        return (
+          <FormularioParaAnalisisDeResultados
+            labValues={labValues}
+            onChange={handleInputChange}
+            onAnalyze={() => handleAnalyze(labValues)}
+            errorMessage={errorMessage}
+          />
+        );
+
       case 'resultados':
         return <SeccionDeResultadosDeAnalisis />;
+
       case 'historial':
-        return <SeccionDeHistorialDeResultados />;
+        return <SeccionDeHistorialDeResultados datos={historial} />;
+
       default:
         return null;
     }
   };
 
   return (
-    <View className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
-      <View className="max-h-screen w-full max-w-md overflow-y-auto rounded-lg border border-gray-400 bg-white shadow-xl">
-        {/* Título */}
-        <View className="flex items-center justify-center border-b border-gray-400 bg-white p-4">
-          <Text className="text-6xl font-semibold text-white">Anemiache</Text>
+    <View style={{ flex: 1, backgroundColor: '#f3f4f6', padding: 20 }}>
+      <View style={{ flex: 1, backgroundColor: 'white', borderRadius: 12, padding: 16 }}>
+        <View style={{ alignItems: 'center', marginBottom: 20 }}>
+          <Text style={{ fontSize: 28, fontWeight: 'bold' }}>Anemiache</Text>
         </View>
 
-        {/* Tabs */}
-        <View className="flex justify-between gap-2 border-b border-gray-400 bg-white p-4">
-          <TabButton label="Análisis" tabId="analisis" isSelected={activeTab === 'analisis'} />
-          <TabButton
-            label="Resultados"
-            tabId="resultados"
-            isSelected={activeTab === 'resultados'}
-          />
-          <TabButton label="Historial" tabId="historial" isSelected={activeTab === 'historial'} />
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
+          <TabButton label="Análisis" tabId="analisis" />
+          <TabButton label="Resultados" tabId="resultados" />
+          <TabButton label="Historial" tabId="historial" />
         </View>
 
-        {/* 👉 AQUI DEBE IR EL CONTENIDO */}
-        <View style={{ padding: 16 }}>{renderContent()}</View>
+        <View style={{ flex: 1 }}>{renderContent()}</View>
       </View>
     </View>
   );
