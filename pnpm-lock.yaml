@@ -96,6 +96,9 @@ importers:
         specifier: ^0.18.5
         version: 0.18.5
     devDependencies:
+      ...:
+        specifier: link:...
+        version: link:...
       '@babel/core':
         specifier: ^7.26.0
         version: 7.28.4

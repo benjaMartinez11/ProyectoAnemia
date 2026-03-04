@@ -20,7 +20,7 @@ export default function AnalisisScreen({ labValues, onChange, onAnalyze, errorMe
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Ingrese sus valores de laboratorio</Text>
+      <Text style={styles.title}>🚑Ingrese sus valores de laboratorio</Text>
 
       <View style={styles.row}>
         <LabInputField
