@@ -9,6 +9,7 @@ import { Button } from '../components/ui/button';
 const App = () => {
   const [activeTab, setActiveTab] = useState('analisis');
   const [errorMessage, setErrorMessage] = useState('');
+  const [resultadoActual, setResultadoActual] = useState<any>(null);
 
   const [labValues, setLabValues] = useState({
     hemoglobina: '',
@@ -39,7 +40,6 @@ const App = () => {
 
     setErrorMessage('');
 
-    // Convertimos a número
     const datosNumericos = {
       hemoglobina: parseFloat(valores.hemoglobina),
       hematocrito: parseFloat(valores.hematocrito),
@@ -49,7 +49,6 @@ const App = () => {
       chcm: parseFloat(valores.chcm),
     };
 
-    // Rangos normales
     const rangos: any = {
       hemoglobina: [12.0, 17.5],
       hematocrito: [36.0, 52.0],
@@ -73,10 +72,12 @@ const App = () => {
 
     if (!fueraDeRango) {
       diagnostico = 'Todos los parámetros están dentro de rango.';
-      recomendaciones = 'Mantener alimentación equilibrada y controles anuales.';
+      recomendaciones =
+        'Mantener alimentación equilibrada y controles anuales.';
     } else {
       diagnostico = 'Se detectaron valores fuera de rango.';
-      recomendaciones = 'Se recomienda evaluación médica para diagnóstico preciso.';
+      recomendaciones =
+        'Se recomienda evaluación médica para diagnóstico preciso.';
     }
 
     const nuevoRegistro = {
@@ -88,7 +89,8 @@ const App = () => {
     };
 
     setHistorial((prev) => [nuevoRegistro, ...prev]);
-    setActiveTab('historial');
+    setResultadoActual(nuevoRegistro);
+    setActiveTab('resultados');
   };
 
   const TabButton = ({ label, tabId }: { label: string; tabId: string }) => {
@@ -118,10 +120,14 @@ const App = () => {
         );
 
       case 'resultados':
-        return <SeccionDeResultadosDeAnalisis />;
+        return (
+          <SeccionDeResultadosDeAnalisis datos={resultadoActual} />
+        );
 
       case 'historial':
-        return <SeccionDeHistorialDeResultados datos={historial} />;
+        return (
+          <SeccionDeHistorialDeResultados datos={historial} />
+        );
 
       default:
         return null;
@@ -130,12 +136,25 @@ const App = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#f3f4f6', padding: 20 }}>
-      <View style={{ flex: 1, backgroundColor: 'white', borderRadius: 12, padding: 16 }}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: 'white',
+          borderRadius: 12,
+          padding: 16,
+        }}>
         <View style={{ alignItems: 'center', marginBottom: 20 }}>
-          <Text style={{ fontSize: 28, fontWeight: 'bold' }}>Anemiache</Text>
+          <Text style={{ fontSize: 28, fontWeight: 'bold' }}>
+            Anemiache
+          </Text>
         </View>
 
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginBottom: 20,
+          }}>
           <TabButton label="Análisis" tabId="analisis" />
           <TabButton label="Resultados" tabId="resultados" />
           <TabButton label="Historial" tabId="historial" />
