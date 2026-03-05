@@ -1,11 +1,11 @@
 import React from "react";
-import { Pressable, Text, ViewStyle, TextStyle } from "react-native";
+import { Pressable, Text, StyleProp, ViewStyle, TextStyle } from "react-native";
 
 // Define a type for the Button props
 interface ButtonProps {
   children: React.ReactNode;  // children can be any valid React node (text, components, etc.)
-  style?: ViewStyle;         // optional custom styles for the Pressable container
-  textStyle?: TextStyle;     // optional custom styles for the Text inside the button
+  style?: StyleProp<ViewStyle>;         // optional custom styles for the Pressable container (allows arrays)
+  textStyle?: StyleProp<TextStyle>;     // optional custom styles for the Text inside the button
   onPress?: () => void;      // onPress handler
 }
 

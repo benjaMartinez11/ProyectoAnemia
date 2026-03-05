@@ -3,7 +3,7 @@ import { SeccionDeHistorialDeResultados } from '../src/historial';
 import { SeccionDeResultadosDeAnalisis } from '../src/resultados';
 import FormularioParaAnalisisDeResultados from '../src/analisis';
 import { MousePointer, CornerUpRight, Calendar } from 'lucide-react-native';
-import { Text, View } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { Button } from '../components/ui/button';
 
 const App = () => {
@@ -99,10 +99,30 @@ const App = () => {
     if (tabId === 'resultados') Icon = CornerUpRight;
     if (tabId === 'historial') Icon = Calendar;
 
+    const isActive = activeTab === tabId;
+
     return (
-      <Button onPress={() => setActiveTab(tabId)}>
-        {Icon && <Icon size={18} />}
-        <Text style={{ marginLeft: 5 }}>{label}</Text>
+      <Button
+        onPress={() => setActiveTab(tabId)}
+        style={[
+          styles.tabButton,
+          isActive && styles.activeTabButton,
+        ]}
+      >
+        {Icon && (
+          <Icon
+            size={18}
+            color={isActive ? '#00E5FF' : '#5F7C8A'}
+          />
+        )}
+        <Text
+          style={[
+            styles.tabText,
+            isActive && styles.activeTabText,
+          ]}
+        >
+          {label}
+        </Text>
       </Button>
     );
   };
@@ -135,35 +155,103 @@ const App = () => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#f3f4f6', padding: 20 }}>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: 'white',
-          borderRadius: 12,
-          padding: 16,
-        }}>
-        <View style={{ alignItems: 'center', marginBottom: 20 }}>
-          <Text style={{ fontSize: 28, fontWeight: 'bold' }}>
-            Anemiache
+    <View style={styles.appBackground}>
+      <View style={styles.glassContainer}>
+        <View style={styles.header}>
+          <Text style={styles.title}>ANEMIACHE</Text>
+          <Text style={styles.subtitle}>
+            Sistema de Evaluación Hematológica
           </Text>
         </View>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginBottom: 20,
-          }}>
+        <View style={styles.tabsContainer}>
           <TabButton label="Análisis" tabId="analisis" />
           <TabButton label="Resultados" tabId="resultados" />
           <TabButton label="Historial" tabId="historial" />
         </View>
 
-        <View style={{ flex: 1 }}>{renderContent()}</View>
+        <View style={styles.content}>
+          {renderContent()}
+        </View>
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  appBackground: {
+    flex: 1,
+    backgroundColor: '#06141F',
+    padding: 20,
+  },
+
+  glassContainer: {
+    flex: 1,
+    backgroundColor: '#0E2230',
+    borderRadius: 24,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: '#12394D',
+    shadowColor: '#00E5FF',
+    shadowOpacity: 0.2,
+    shadowRadius: 25,
+    elevation: 15,
+  },
+
+  header: {
+    marginBottom: 30,
+  },
+
+  title: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#E6FAFF',
+    letterSpacing: 3,
+  },
+
+  subtitle: {
+    fontSize: 12,
+    color: '#4FDFFF',
+    marginTop: 6,
+    letterSpacing: 2,
+  },
+
+  tabsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 25,
+  },
+
+  tabButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 14,
+    backgroundColor: '#102C3A',
+  },
+
+  activeTabButton: {
+    backgroundColor: '#0C1F2A',
+    borderWidth: 1,
+    borderColor: '#00E5FF',
+  },
+
+  tabText: {
+    marginLeft: 6,
+    fontSize: 14,
+    color: '#5F7C8A',
+    letterSpacing: 1,
+  },
+
+  activeTabText: {
+    color: '#00E5FF',
+    fontWeight: '600',
+  },
+
+  content: {
+    flex: 1,
+  },
+});
 
 export default App;
